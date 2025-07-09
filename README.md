@@ -1,4 +1,4 @@
-# Electronix AI - Binary Sentiment Analysis Microservice
+# Electronix AI -  Sentiment Analysis
 
 An end-to-end microservice for binary sentiment analysis using a Hugging Face Transformer, with a React + Tailwind frontend and Docker Compose orchestration.
 
