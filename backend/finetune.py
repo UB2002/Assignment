@@ -4,7 +4,8 @@ import os
 from tqdm import tqdm
 import torch
 from torch.utils.data import Dataset, DataLoader
-from transformers import AutoTokenizer, AutoModelForSequenceClassification, AdamW, get_linear_schedule_with_warmup
+from transformers import AutoTokenizer, AutoModelForSequenceClassification, get_linear_schedule_with_warmup
+from torch.optim import AdamW
 from app.utils import set_seed
 
 class TextDataset(Dataset):
@@ -66,9 +67,9 @@ def train(args):
 
     # save fine‑tuned weights
     os.makedirs("model", exist_ok=True)
-    model.save_pretrained("model")
-    tokenizer.save_pretrained("model")
-    print("Saved fine‑tuned model to ./model")
+    model.save_pretrained("model")  # This updates only the model weights/config
+    # tokenizer.save_pretrained("model")  # Uncomment if tokenizer changes
+    print("Saved fine‑tuned model weights to ./model")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

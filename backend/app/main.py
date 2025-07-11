@@ -15,7 +15,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# deterministic seeds for CPU-only runs
+
 set_seed(42)
 
 app.include_router(router, prefix="")

@@ -11,10 +11,18 @@ class SentimentModel:
         self._load()
 
     def _load(self):
-        # If fine‑tuned weights exist in ./model, load those; else load pretrained
-        path = MODEL_DIR if os.path.isdir(MODEL_DIR) and os.listdir(MODEL_DIR) else PRETRAINED_MODEL
-        self.tokenizer = AutoTokenizer.from_pretrained(path)
-        self.model = AutoModelForSequenceClassification.from_pretrained(path)
+        # Check if local model exists
+        if os.path.isdir(MODEL_DIR) and os.listdir(MODEL_DIR):
+            path = MODEL_DIR
+            self.tokenizer = AutoTokenizer.from_pretrained(path)
+            self.model = AutoModelForSequenceClassification.from_pretrained(path)
+        else:
+            # Load from pretrained, then save to MODEL_DIR
+            self.tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL)
+            self.model = AutoModelForSequenceClassification.from_pretrained(PRETRAINED_MODEL)
+            os.makedirs(MODEL_DIR, exist_ok=True)
+            self.model.save_pretrained(MODEL_DIR)
+            self.tokenizer.save_pretrained(MODEL_DIR)
         self.model.to(self.device)
         self.model.eval()
 
@@ -27,3 +35,10 @@ class SentimentModel:
         label_idx = int(scores.argmax())
         label = self.model.config.id2label[label_idx]
         return {"label": label.lower(), "score": float(scores[label_idx])}
+
+
+if __name__ =="__main__":
+    s = SentimentModel()
+    text = "this is a good product"
+    ans = s.predict(text)
+    print(ans)

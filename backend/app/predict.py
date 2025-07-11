@@ -9,7 +9,7 @@ class PredictRequest(BaseModel):
     text: str
 
 class PredictResponse(BaseModel):
-    label: str  # "positive" or "negative"
+    label: str  
     score: float
 
 @router.post("/predict", response_model=PredictResponse)
